@@ -120,43 +120,54 @@ const findRecurrentElements = (data) => {
     return recurrentPatternsArr
 }
 
-// const test = findRecurrentElements(fullAdnFile)
-// console.log(test)
+
+const isBigger = (numberToCheck, biggest) => {
+    return numberToCheck >= biggest && numberToCheck > 1 ? true : false
+}
 
 
-const createSequence = (data) => {
+const createAllSequences = (data) => {
 
     const recurrentPatternsArr = findRecurrentElements(data)
-
     const sequences = []
 
+    // iterate on every subgroup
     for (let i = 0; i<recurrentPatternsArr.length; i++) {
-        
-        const sequence = []
-    
-        for (let j = 0; j < 5; j++) {
-            let winner = ""
-            let biggestNum = 1
-    
-            for (let k = 0; k<4; k++) {
-    
-                if ((Object.entries(recurrentPatternsArr[i])[k][1][j]) >= biggestNum && (Object.entries(recurrentPatternsArr[i])[k][1][j] > 1)) {
-                    biggestNum = Object.entries(recurrentPatternsArr[i])[k][1][j]
-                    winner += Object.entries(recurrentPatternsArr[i])[k][0]
-                }
-    
-            }
-    
-            sequence.push(winner)       
-    
-        }
-
-        sequences.push(sequence)
-    
+        sequences.push(createSubSequence(recurrentPatternsArr, i))
     }
 
     return sequences
 
 }
 
-console.log(createSequence(fullAdnFile))
+const createSubSequence = (patterns, index) => {
+    const sequence = []
+
+    // for each subgroup, iterate on each index of the 5 numbers sequence
+    for (let j = 0; j < 5; j++) {
+
+        let winner = ""
+        let biggestNum = 1
+
+        // for each index, find biggest number and save corresponding letter
+        for (let k = 0; k<4; k++) {
+
+            const numberToCheck = Object.entries(patterns[index])[k][1][j]
+            const letterChecked = Object.entries(patterns[index])[k][0]
+
+            if (isBigger(numberToCheck, biggestNum)) {
+                biggestNum = numberToCheck
+                winner += letterChecked
+            }
+
+        }
+
+        sequence.push(winner)       
+
+    }
+
+    return sequence
+}
+
+const test = createAllSequences(fullAdnFile)
+console.log(test)
