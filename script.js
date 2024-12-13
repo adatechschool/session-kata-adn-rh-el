@@ -102,7 +102,8 @@ const fiveSeqSubGroup = twentyfiveCharsArr.map(element => sliceStr(element, 5))
 // compter le nombre de A C G T et leurs index
 // 
 
-const recurrentPatterns = {}
+const recurrentPatternsArr = []
+const recurrentPatternsObj = {}
 
 for (let i = 0; i< fiveSeqSubGroup.length; i++) {
 
@@ -119,9 +120,77 @@ for (let i = 0; i< fiveSeqSubGroup.length; i++) {
 
     }
 
-    recurrentPatterns[`seq${i+1}`] = seq
+    recurrentPatternsArr.push(seq)
+    recurrentPatternsObj[`seq${i+1}`] = seq
 
 }
 
 // console.log(fiveSeqSubGroup[1])
 // console.log(recurrentPatterns)
+
+
+// console.log(recurrentPatternsArr)
+
+// sur chaque sous groupe, repérer l'élément ayant la plus grosse valeur sur chaque index
+// for (let i = 0; i<recurrentPatternsArr.length; i++) {
+
+
+//     let sequence = ""
+
+//     for (let j = 0; j < 4; j++) {
+//         let winner = ""
+//         let biggestNum = 0
+//         console.log(recurrentPatternsArr[i])
+
+//         for (let k = 0; k < 5; k++) {
+
+//             // console.log(Object.entries(recurrentPatternsArr[i]))
+//             // console.log("k index", k)
+
+//             if (Object.entries(recurrentPatternsArr[i])[j][1][k] > biggestNum) {
+
+//                 winner = Object.entries(recurrentPatternsArr[i])[j][0]
+//                 biggestNum = Object.entries(recurrentPatternsArr[i])[j][1][k]
+
+                
+//             }
+//             // console.log(winner)
+//         }
+
+//         sequence += winner
+//     }
+
+    
+
+//     console.log(sequence)
+
+//     console.log('_____')
+
+// }
+
+
+for (let i = 0; i<recurrentPatternsArr.length; i++) {
+
+
+    let sequence = []
+
+    
+    for (let j = 0; j < 5; j++) {
+        let winner = ""
+        let biggestNum = 1
+
+        for (let k = 0; k<4; k++) {
+
+            if ((Object.entries(recurrentPatternsArr[i])[k][1][j]) >= biggestNum && (Object.entries(recurrentPatternsArr[i])[k][1][j] > 1)) {
+                biggestNum = Object.entries(recurrentPatternsArr[i])[k][1][j]
+                winner += Object.entries(recurrentPatternsArr[i])[k][0]
+            }
+
+        }
+
+        sequence.push(winner)       
+
+    }
+    
+
+}
