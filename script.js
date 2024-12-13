@@ -76,121 +76,87 @@ const sliceStr = (str, x) => {
     return res
 }
 
-const threeCharsArr = sliceStr(fullAdnFile, 3)
 
 
-const protTable = new Map()
-const protObj = {}
+const convertElements = (data, table) => {
+    const threeCharsArr = sliceStr(data, 3)
+    const protObj = {}
 
-threeCharsArr.forEach(element => {
-    protTable.set(element, conversionTable[element])
-    protObj[element] = conversionTable[element]
-})
+    threeCharsArr.forEach(element => {
+        protObj[element] = table[element]
+    })
 
-// console.log(protObj)
-
-
-const twentyfiveCharsArr = sliceStr(fullAdnFile, 25)
-
-const fiveSeqSubGroup = twentyfiveCharsArr.map(element => sliceStr(element, 5))
-
-
-// console.log(fiveSeqSubGroup)
-
-// pour chaque groupe
-// itérer sur les 5 sous groupe
-// compter le nombre de A C G T et leurs index
-// 
-
-const recurrentPatternsArr = []
-const recurrentPatternsObj = {}
-
-for (let i = 0; i< fiveSeqSubGroup.length; i++) {
-
-    const seq = {
-        A: [0,0,0,0,0],
-        C: [0,0,0,0,0],
-        G: [0,0,0,0,0],
-        T: [0,0,0,0,0]
-    }
-    
-    for (let j = 0; j<5; j++) {
-
-        fiveSeqSubGroup[i][j].split('').map((element, index) => seq[element][index]++)
-
-    }
-
-    recurrentPatternsArr.push(seq)
-    recurrentPatternsObj[`seq${i+1}`] = seq
-
+    return protObj
 }
 
-// console.log(fiveSeqSubGroup[1])
-// console.log(recurrentPatterns)
+// const test = convertElements(fullAdnFile, conversionTable)
+// console.log(test)
 
 
-// console.log(recurrentPatternsArr)
-
-// sur chaque sous groupe, repérer l'élément ayant la plus grosse valeur sur chaque index
-// for (let i = 0; i<recurrentPatternsArr.length; i++) {
-
-
-//     let sequence = ""
-
-//     for (let j = 0; j < 4; j++) {
-//         let winner = ""
-//         let biggestNum = 0
-//         console.log(recurrentPatternsArr[i])
-
-//         for (let k = 0; k < 5; k++) {
-
-//             // console.log(Object.entries(recurrentPatternsArr[i]))
-//             // console.log("k index", k)
-
-//             if (Object.entries(recurrentPatternsArr[i])[j][1][k] > biggestNum) {
-
-//                 winner = Object.entries(recurrentPatternsArr[i])[j][0]
-//                 biggestNum = Object.entries(recurrentPatternsArr[i])[j][1][k]
-
-                
-//             }
-//             // console.log(winner)
-//         }
-
-//         sequence += winner
-//     }
-
+const findRecurrentElements = (data) => {
+    const twentyfiveCharsArr = sliceStr(data, 25)
+    const fiveSeqSubGroup = twentyfiveCharsArr.map(element => sliceStr(element, 5))
+    const recurrentPatternsArr = []
     
-
-//     console.log(sequence)
-
-//     console.log('_____')
-
-// }
-
-
-for (let i = 0; i<recurrentPatternsArr.length; i++) {
-
-
-    let sequence = []
-
+    for (let i = 0; i< fiveSeqSubGroup.length; i++) {
     
-    for (let j = 0; j < 5; j++) {
-        let winner = ""
-        let biggestNum = 1
+        const seq = {
+            A: [0,0,0,0,0],
+            C: [0,0,0,0,0],
+            G: [0,0,0,0,0],
+            T: [0,0,0,0,0]
+        }
+        
+        for (let j = 0; j<5; j++) {
+    
+            fiveSeqSubGroup[i][j].split('').map((element, index) => seq[element][index]++)
+    
+        }
+    
+        recurrentPatternsArr.push(seq)
 
-        for (let k = 0; k<4; k++) {
+    }    
 
-            if ((Object.entries(recurrentPatternsArr[i])[k][1][j]) >= biggestNum && (Object.entries(recurrentPatternsArr[i])[k][1][j] > 1)) {
-                biggestNum = Object.entries(recurrentPatternsArr[i])[k][1][j]
-                winner += Object.entries(recurrentPatternsArr[i])[k][0]
+    return recurrentPatternsArr
+}
+
+// const test = findRecurrentElements(fullAdnFile)
+// console.log(test)
+
+
+const createSequence = (data) => {
+
+    const recurrentPatternsArr = findRecurrentElements(data)
+
+    const sequences = []
+
+    for (let i = 0; i<recurrentPatternsArr.length; i++) {
+        
+        const sequence = []
+    
+        for (let j = 0; j < 5; j++) {
+            let winner = ""
+            let biggestNum = 1
+    
+            for (let k = 0; k<4; k++) {
+    
+                if ((Object.entries(recurrentPatternsArr[i])[k][1][j]) >= biggestNum && (Object.entries(recurrentPatternsArr[i])[k][1][j] > 1)) {
+                    biggestNum = Object.entries(recurrentPatternsArr[i])[k][1][j]
+                    winner += Object.entries(recurrentPatternsArr[i])[k][0]
+                }
+    
             }
-
+    
+            sequence.push(winner)       
+    
         }
 
-        sequence.push(winner)       
-
-    }
+        sequences.push(sequence)
     
+    }
+
+    return sequences
 
 }
+
+console.log(createSequence(fullAdnFile))
